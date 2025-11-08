@@ -269,7 +269,6 @@ No external datasets required.
 2. **Theoretical Analysis**: Derive regret bounds for BPG‑DS to justify threshold selection.
 3. **Real‑World Application**: Test on ML hyperparameter tuning (Week 7 planned).
 4. **Parallelization**: Implement multi‑core posterior sampling for Hartmann‑6D.
-5. **Workshop Submission**: Target NeurIPS 2026 BayesOpt Workshop with completed ablation results.
 
 ---
 
