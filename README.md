@@ -1,10 +1,10 @@
-Bayesian Posterior-Guided Domain Shrinking BPG-DS vs REDS
+# Bayesian Posterior-Guided Domain Shrinking BPG-DS vs REDS
 
 Implementation and experimental evaluation of efficient Bayesian optimization with domain shrinking, comparing deterministic REDS and probabilistic BPG-DS v1 and v2 pruning strategies.
 
 ---
 
-Project Documentation
+## Project Documentation
 
 This repository contains the complete research documentation, implementation, and experimental results:
 
@@ -19,7 +19,7 @@ This repository contains the complete research documentation, implementation, an
 
 ---
 
-1 Problem Statement
+## 1 Problem Statement
 
 Expensive black-box objectives require sample-efficient optimization. A Gaussian Process GP surrogate models the objective; the search domain is iteratively reduced to focus evaluations on promising regions.
 
@@ -31,7 +31,7 @@ Goal: evaluate whether probabilistic pruning improves optimization quality while
 
 ---
 
-2 Repository Structure
+## 2 Repository Structure
 
 The notebook enforces a fixed cell layout:
 1. Package installation
@@ -58,20 +58,20 @@ All parameters controlled via CONFIG. No hidden constants.
 
 ---
 
-3 Methods Implemented
+## 3 Methods Implemented
 
-3.1 REDS Baseline
+### 3.1 REDS Baseline
 - Epoch-based random exploration with doubling schedule.
 - Information-theoretic beta_n incorporates information gain gamma_n, RKHS bound B, confidence delta.
 - Deterministic pruning: keep x if UCB x ge max LCB over the active domain.
 
-3.2 BPG-DS v1 Proposed
+### 3.2 BPG-DS v1 Proposed
 - GP posterior sampling via Cholesky decomposition.
 - Posterior probability p x = fraction of samples where x is within epsilon of each samples maximum.
 - Probabilistic pruning: keep x if p x ge P_threshold.
 - Fixed threshold P = 0.3.
 
-3.3 BPG-DS v2 Proposed - Information-Theoretic Threshold NEW Nov 11
+### 3.3 BPG-DS v2 Proposed - Information-Theoretic Threshold NEW Nov 11
 - Same GP posterior sampling as v1.
 - Same posterior probability computation as v1.
 - Adaptive threshold: tau_x = mean_p + k_factor std_p.
@@ -82,7 +82,7 @@ Only the pruning rule differs; all other components remain identical to the base
 
 ---
 
-4 Test Functions and Domains
+## 4 Test Functions and Domains
 
 Implemented benchmark objectives with configurable bounds and grid sizes in CONFIG:
 - Branin 2D - grid_size: 50
@@ -98,7 +98,7 @@ No external datasets required for synthetic benchmarks.
 
 ---
 
-5 Utilities and Preprocessing
+## 5 Utilities and Preprocessing
 
 - Domain discretization, random sampling, seeding.
 - RBF kernel, UCB LCB computation, information-theoretic beta_n.
@@ -110,15 +110,15 @@ No external datasets required for synthetic benchmarks.
 
 ---
 
-6 Experiments Run
+## 6 Experiments Run
 
-6.1 Initial Benchmark Suite Nov 2
+### 6.1 Initial Benchmark Suite Nov 2
 - 10 random seeds per function.
 - Fixed budget with 6 epochs; identical initialization for fair comparison.
 - Metrics: best value, simple regret, cumulative regret, runtime, domain size.
 - Visualizations: convergence curves, regret bands mean +- std, domain shrinking, summary bar charts, posterior probability heatmaps 2D.
 
-6.2 Enhanced Ablation Study Nov 8
+### 6.2 Enhanced Ablation Study Nov 8
 - 15 seeds per configuration increased from 10 for statistical robustness.
 - Memory-efficient implementation: incremental CSV writes, minimal RAM usage, garbage collection after each experiment.
 - Grid tested: K in 20, 35, 50, P in 0.2, 0.3, 0.4, epsilon = 0.1.
@@ -126,7 +126,7 @@ No external datasets required for synthetic benchmarks.
 - Statistical rigor: t-tests, Wilcoxon tests, Cohens d effect sizes, 95 confidence intervals.
 - Voting system: Democratic selection of optimal hyperparameters across all functions.
 
-6.3 BPG-DS v2 Comprehensive Ablation Study Nov 11 NEW
+### 6.3 BPG-DS v2 Comprehensive Ablation Study Nov 11 NEW
 - 15 seeds per configuration.
 - K_factor grid tested: K_factor in 0.3, 0.5, 0.7, 0.9, 1.0.
 - Total experiments: 4 functions x 5 K_factors x 15 seeds = 300 experiments.
@@ -134,14 +134,14 @@ No external datasets required for synthetic benchmarks.
 - Statistical analysis: mean, std, confidence intervals, domain stability metrics.
 - Cross-function performance comparison.
 
-6.4 REDS vs BPG-DS v2 Head-to-Head Comparison Nov 11 NEW
+### 6.4 REDS vs BPG-DS v2 Head-to-Head Comparison Nov 11 NEW
 - 15 seeds per function using optimal K_factors from ablation.
 - Function-specific K_factors: Branin K=0.9, Hartmann3D K=0.5, Ackley2D K=0.3, Rosenbrock2D K=0.3.
 - Statistical comparison: t-tests, p-values, effect sizes.
 - Win loss tie record across 4 benchmark functions.
 - Overall performance aggregation.
 
-6.5 Real-World ML Experiment Nov 11 NEW
+### 6.5 Real-World ML Experiment Nov 11 NEW
 - Task: SVM hyperparameter optimization C and gamma on breast cancer binary classification.
 - Dataset: sklearn.datasets.load_breast_cancer 398 train, 171 test samples.
 - Objective: minimize validation error maximize accuracy.
@@ -150,9 +150,9 @@ No external datasets required for synthetic benchmarks.
 
 ---
 
-7 Results Summary
+## 7 Results Summary
 
-7.1 Initial Results Nov 2 - 10 Seeds
+### 7.1 Initial Results Nov 2 - 10 Seeds
 
 Branin 2D
 - REDS: simple regret 0.1008 +- 0.0968
@@ -174,7 +174,7 @@ Rosenbrock-2D 2D
 - BPG-DS v1: simple regret 0.0947 +- 0.1331
 - Outcome: baseline better on this function.
 
-7.2 Ablation Study Results Nov 8 - 15 Seeds
+### 7.2 Ablation Study Results Nov 8 - 15 Seeds
 
 Recommended Global Configuration Voting:
 - K_SAMPLES: 20
@@ -195,7 +195,7 @@ Statistical Significance:
 
 Key Finding: BPG-DS v1 demonstrates function-specific performance - excels on Hartmann3D and Rosenbrock2D but underperforms on Ackley2D.
 
-7.3 BPG-DS v2 Comprehensive Ablation Results Nov 11 - 15 Seeds NEW
+### 7.3 BPG-DS v2 Comprehensive Ablation Results Nov 11 - 15 Seeds NEW
 
 Recommended Per-Function K_Factors:
 - Branin: K=0.9 → regret 0.169 +- 0.198 
@@ -209,7 +209,7 @@ Key Findings:
 - Higher K_factors more aggressive pruning effective for Branin and Hartmann3D.
 - Global recommendation K=0.3 based on mean regret across all functions 1.464 +- 1.631.
 
-7.4 REDS vs BPG-DS v2 Head-to-Head Comparison Nov 11 - 15 Seeds NEW
+### 7.4 REDS vs BPG-DS v2 Head-to-Head Comparison Nov 11 - 15 Seeds NEW
 
 Loaded 525 experiments 465 successful:
 
@@ -250,7 +250,7 @@ Key Findings:
 - Hartmann3D shows v2 worse but not significant, likely due to sample size imbalance.
 - Overall 65.1 percent improvement demonstrates strong performance across benchmarks.
 
-7.5 Real-World ML Experiment Nov 11 - 10 Seeds NEW
+### 7.5 Real-World ML Experiment Nov 11 - 10 Seeds NEW
 
 Task: SVM hyperparameter tuning C and gamma on breast cancer dataset.
 
@@ -271,7 +271,7 @@ Timing:
 
 ---
 
-8 How to Reproduce
+## 8 How to Reproduce
 
 8.1 Basic Benchmarks Nov 2 Work
 1. Open the main notebook bml-project.ipynb in Colab Kaggle local environment.
@@ -409,7 +409,7 @@ Expected Runtime: 2-3 hours for full experiment 20 runs.
 
 ---
 
-9 Practical Notes
+## 9 Practical Notes
 
 - For higher dimensions, reduce grid size or subsample the domain before posterior sampling.
 - Use the same seeds and budgets for fair method comparison.
@@ -423,7 +423,7 @@ Expected Runtime: 2-3 hours for full experiment 20 runs.
 
 ---
 
-10 Changelog
+## 10 Changelog
 
 - Week 1: Baseline REDS implemented and validated on Branin and Hartmann-3D.
 - Week 2: BPG-DS v1 implemented; posterior sampling and probabilistic pruning added.
@@ -453,7 +453,7 @@ Expected Runtime: 2-3 hours for full experiment 20 runs.
 
 ---
 
-11 References
+## 11 References
 
 - REDS paper: S. Salgia, V. Vakili, Q. Zhao, Random Exploration in Bayesian Optimization: Order-Optimal Regret and Computational Efficiency, ICML 2024.
 - Project proposal: BML_AYUSH_SAUN_MT24024.pdf motivation, novelty, feasibility.
@@ -462,7 +462,7 @@ Expected Runtime: 2-3 hours for full experiment 20 runs.
 
 ---
 
-12 Known Issues and Future Work
+## 12 Known Issues and Future Work
 
 Current Limitations:
 - Ackley2D catastrophic failure in v1 -406 percent vs REDS - RESOLVED in v2 with adaptive threshold.
@@ -480,6 +480,6 @@ Future Directions:
 
 ---
 
-13 License
+## 13 License
 
 This repository is released for academic and non-commercial use. See LICENSE for details.
